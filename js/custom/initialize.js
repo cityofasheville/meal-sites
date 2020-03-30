@@ -14,7 +14,11 @@ function showInfo(data, tabletop) {
   let objCount = 0;
   let rowHasRoom = 0;
   let cardSelectors = '';
+  let typeLabel = '';
   let sanitizedValue = '';
+  // let todaysDate = new Date();
+  // var startDate = new Date();
+  // var endDate = new Date;
   let thisObject = {};
   let dayClassM = '';
   let dayClassT = '';
@@ -44,142 +48,172 @@ function showInfo(data, tabletop) {
 
     cardSelectors = '';
     rowHasRoom = objCount % 3;
+
+    // if (obj.startDate.trim()) {
+    //   startDate = new Date(obj.startDate);
+    // } 
+    // if (obj.endDate.trim()) {
+    //   endDate = new Date(obj.endDate);
+    // } 
+
     
-    if (obj.generalArea.trim()) {
+    // if(GivenDate > CurrentDate){
+    //     alert('Given date is greater than the current date.');
+    // }else{
+    //     alert('Given date is not greater than the current date.');
+    // }    
+    
+    // console.log(startDate + ' - ' + endDate);
+    
+    if (obj.endDate.trim() !== '3/29/2020') {
 
-      sanitizedValue = 'area-' + obj.generalArea.trim().toLowerCase().replace(/[^0-9a-z]/gi, '');
-      cardSelectors += sanitizedValue + ' ';
+      if (obj.generalArea.trim()) {
 
-      if (window.filterOptions.areaValues.indexOf(sanitizedValue) < 0) {
-        window.filterOptions.areaLabels.push(obj.generalArea.trim());
-        window.filterOptions.areaValues.push(sanitizedValue);
+        sanitizedValue = 'area-' + obj.generalArea.trim().toLowerCase().replace(/[^0-9a-z]/gi, '');
+        cardSelectors += sanitizedValue + ' ';
+  
+        if (window.filterOptions.areaValues.indexOf(sanitizedValue) < 0) {
+          window.filterOptions.areaLabels.push(obj.generalArea.trim());
+          window.filterOptions.areaValues.push(sanitizedValue);
+        }
       }
-    }
-
-    if (obj.type.trim()) {
-
-      sanitizedValue = 'type-' + obj.type.trim().toLowerCase().replace(/[^0-9a-z]/gi, '');
-      cardSelectors += sanitizedValue + ' ';
-
-      if (window.filterOptions.typeValues.indexOf(sanitizedValue) < 0) {
-        window.filterOptions.typeLabels.push(obj.type.trim());
-        window.filterOptions.typeValues.push(sanitizedValue);
+  
+      if (obj.type.trim()) {
+  
+        sanitizedValue = 'type-' + obj.type.trim().toLowerCase().replace(/[^0-9a-z]/gi, '');
+        cardSelectors += sanitizedValue + ' ';
+  
+        if (window.filterOptions.typeValues.indexOf(sanitizedValue) < 0) {
+          if (obj.type.trim() === 'Students') { 
+            typeLabel = 'Student Meals' 
+          } else {
+            typeLabel = obj.type.trim() 
+          }
+          window.filterOptions.typeLabels.push(typeLabel);
+          window.filterOptions.typeValues.push(sanitizedValue);
+        }
       }
-    }
-
-    if (obj.mo.trim()) {
-      cardSelectors += 'day-mo ';
-      dayClassM = 'day-of-week--on';
-
-      if (window.filterOptions.dayValues.indexOf('day-mo') < 0) {
-        window.filterOptions.dayLabels.push('Monday');
-        window.filterOptions.dayValues.push('day-mo');
+  
+      if (obj.mo.trim()) {
+        cardSelectors += 'day-mo ';
+        dayClassM = 'day-of-week--on';
+  
+        if (window.filterOptions.dayValues.indexOf('day-mo') < 0) {
+          window.filterOptions.dayLabels.push('Monday');
+          window.filterOptions.dayValues.push('day-mo');
+        }
       }
-    }
-    else {
-      dayClassM = 'day-of-week--off';
-    }
-
-    if (obj.tu.trim()) {
-      cardSelectors += 'day-tu ';
-      dayClassT = 'day-of-week--on';
-
-      if (window.filterOptions.dayValues.indexOf('day-tu') < 0) {
-        window.filterOptions.dayLabels.push('Tuesday');
-        window.filterOptions.dayValues.push('day-tu');
+      else {
+        dayClassM = 'day-of-week--off';
       }
-    }
-    else {
-      dayClassT = 'day-of-week--off';
-    }
-
-    if (obj.we.trim()) {
-      cardSelectors += 'day-we ';
-      dayClassW = 'day-of-week--on';
-
-      if (window.filterOptions.dayValues.indexOf('day-we') < 0) {
-        window.filterOptions.dayLabels.push('Wednesday');
-        window.filterOptions.dayValues.push('day-we');
+  
+      if (obj.tu.trim()) {
+        cardSelectors += 'day-tu ';
+        dayClassT = 'day-of-week--on';
+  
+        if (window.filterOptions.dayValues.indexOf('day-tu') < 0) {
+          window.filterOptions.dayLabels.push('Tuesday');
+          window.filterOptions.dayValues.push('day-tu');
+        }
       }
-    }
-    else {
-      dayClassW = 'day-of-week--off';
-    }
-
-    if (obj.th.trim()) {
-      cardSelectors += 'day-th ';
-      dayClassTh = 'day-of-week--on';
-
-      if (window.filterOptions.dayValues.indexOf('day-th') < 0) {
-        window.filterOptions.dayLabels.push('Thursday');
-        window.filterOptions.dayValues.push('day-th');
+      else {
+        dayClassT = 'day-of-week--off';
       }
-    }
-    else {
-      dayClassTh = 'day-of-week--off';
-    }
-
-    if (obj.fr.trim()) {
-      cardSelectors += 'day-fr ';
-      dayClassF = 'day-of-week--on';
-
-      if (window.filterOptions.dayValues.indexOf('day-fr') < 0) {
-        window.filterOptions.dayLabels.push('Friday');
-        window.filterOptions.dayValues.push('day-fr');
+  
+      if (obj.we.trim()) {
+        cardSelectors += 'day-we ';
+        dayClassW = 'day-of-week--on';
+  
+        if (window.filterOptions.dayValues.indexOf('day-we') < 0) {
+          window.filterOptions.dayLabels.push('Wednesday');
+          window.filterOptions.dayValues.push('day-we');
+        }
       }
-    }
-    else {
-      dayClassF = 'day-of-week--off';
-    }
-
-    if (obj.sa.trim()) {
-      cardSelectors += 'day-sa ';
-      dayClassSa = 'day-of-week--on';
-
-      if (window.filterOptions.dayValues.indexOf('day-sa') < 0) {
-        window.filterOptions.dayLabels.push('Saturday');
-        window.filterOptions.dayValues.push('day-sa');
+      else {
+        dayClassW = 'day-of-week--off';
       }
-    }
-    else {
-      dayClassSa = 'day-of-week--off';
-    }
-
-    if (obj.su.trim()) {
-      cardSelectors += 'day-su ';
-      dayClassSu = 'day-of-week--on';
-
-      if (window.filterOptions.dayValues.indexOf('day-su') < 0) {
-        window.filterOptions.dayLabels.push('Sunday');
-        window.filterOptions.dayValues.push('day-su');
+  
+      if (obj.th.trim()) {
+        cardSelectors += 'day-th ';
+        dayClassTh = 'day-of-week--on';
+  
+        if (window.filterOptions.dayValues.indexOf('day-th') < 0) {
+          window.filterOptions.dayLabels.push('Thursday');
+          window.filterOptions.dayValues.push('day-th');
+        }
       }
+      else {
+        dayClassTh = 'day-of-week--off';
+      }
+  
+      if (obj.fr.trim()) {
+        cardSelectors += 'day-fr ';
+        dayClassF = 'day-of-week--on';
+  
+        if (window.filterOptions.dayValues.indexOf('day-fr') < 0) {
+          window.filterOptions.dayLabels.push('Friday');
+          window.filterOptions.dayValues.push('day-fr');
+        }
+      }
+      else {
+        dayClassF = 'day-of-week--off';
+      }
+  
+      if (obj.sa.trim()) {
+        cardSelectors += 'day-sa ';
+        dayClassSa = 'day-of-week--on';
+  
+        if (window.filterOptions.dayValues.indexOf('day-sa') < 0) {
+          window.filterOptions.dayLabels.push('Saturday');
+          window.filterOptions.dayValues.push('day-sa');
+        }
+      }
+      else {
+        dayClassSa = 'day-of-week--off';
+      }
+  
+      if (obj.su.trim()) {
+        cardSelectors += 'day-su ';
+        dayClassSu = 'day-of-week--on';
+  
+        if (window.filterOptions.dayValues.indexOf('day-su') < 0) {
+          window.filterOptions.dayLabels.push('Sunday');
+          window.filterOptions.dayValues.push('day-su');
+        }
+      }
+      else {
+        dayClassSu = 'day-of-week--off';
+      }
+  
+      obj.selectors = cardSelectors;
+      obj.styleM = dayClassM;
+      obj.styleT = dayClassT;
+      obj.styleW = dayClassW;
+      obj.styleTh = dayClassTh;
+      obj.styleF = dayClassF;
+      obj.styleSa = dayClassSa;
+      obj.styleSu = dayClassSu;
+  
+      thisObject = {
+        objectID: obj.GEOID,
+        selectors: cardSelectors
+      };
+  
+      window.filterSelectors.push(thisObject);
+  
+      addCard(obj,rowHasRoom);
+  
+      objCount++;
+  
     }
-    else {
-      dayClassSu = 'day-of-week--off';
-    }
 
-    obj.selectors = cardSelectors;
-    obj.styleM = dayClassM;
-    obj.styleT = dayClassT;
-    obj.styleW = dayClassW;
-    obj.styleTh = dayClassTh;
-    obj.styleF = dayClassF;
-    obj.styleSa = dayClassSa;
-    obj.styleSu = dayClassSu;
 
-    thisObject = {
-      objectID: obj.GEOID,
-      selectors: cardSelectors
-    };
-
-    window.filterSelectors.push(thisObject);
-
-    addCard(obj,rowHasRoom);
-
-    objCount++;
+    // let startDate = null;
+    // let endDate = null;
+  
   });
 
-  // console.log(this);
+  console.log(window.filterSelectors);
 
   let areaOptions = '';
   for (let i=0; i < window.filterOptions.areaValues.length; i++) {
@@ -211,7 +245,7 @@ function addCard(o,rowMod) {
         <div class="card-header"><h3>${o.name}</h3></div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">${o.generalArea}</li>
-          <li class="list-group-item">Service: ${o.type}</li>
+          <li class="list-group-item">Service: ${o.type === 'Students' ? 'Student Meals' : o.type}</li>
           <li class="list-group-item">
             <ul class="week-list" aria-label="Days of the week">
               <li class="day-of-week ${o.styleM}" title="${o.name} ${o.type} service is ${o.styleM === 'day-of-week--on' ? 'open' : 'closed'} on Monday"><span class="day-label">M</span></li>

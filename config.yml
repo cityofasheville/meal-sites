@@ -1,0 +1,28 @@
+version: 2.1
+
+orbs:
+  aws-s3: circleci/aws-s3@1.0.0
+
+defaults: &defaults
+  docker:
+    - image: circleci/python:3.7.1
+jobs: 
+  build-prod:
+    <<: *defaults
+    steps:
+      - checkout
+      - aws-s3/sync:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_DEFAULT_REGION
+          from: ./
+          to: 's3://${S3_DEPLOY_BUCKET}'
+          arguments: |
+            --acl public-read
+  build-deploy:
+    jobs:
+      - build-prod:
+          filters:
+            branches:
+              only:  master
+          context: mealsites-production
