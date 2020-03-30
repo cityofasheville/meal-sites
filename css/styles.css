@@ -1,0 +1,134 @@
+.jumbotron {
+  background: url(../img/food.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;  
+  opacity: 1;
+  position: relative;
+  padding: 12em 0;
+}
+
+.jumbotron--text {
+  z-index: 999;
+  position: absolute;
+  display: block;
+  text-align: center;
+  padding: 2rem 1rem;
+  width: 85%;
+  max-width: 760px;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  border: 2px solid black;
+  border-radius: 15px;
+  opacity: .83;
+}
+
+.container--jumbo {
+  width: 100%;
+  border: 2px solid red;
+}
+
+.container--filter {
+  border: 12px solid rgba(0,0,0,.5);
+}
+
+.select-label {
+  margin: 0;
+  font-size: .9em;
+}
+
+.selected-filters-default-area,
+.selected-filters-default-day,
+.selected-filters-default-type {
+  font-size: .9em;
+}
+
+.filter-button {
+  background-color: rgba(17, 122, 170, 0.2);
+  font-size: .9em;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: rgba(233, 59, 36,.5);
+}
+
+.filter-button:hover::after {
+  content: ' [remove filter]';
+}
+
+.filter-remove {
+  font-size: .75em;
+  display: none;
+}
+
+.filter-button:hover .filter-remove {
+  display: inline-block;
+}
+
+.map-link {
+  text-decoration: underline;
+}
+
+.week-list {
+  list-style: none;
+  text-align: left;
+  list-style-type: none;
+  padding: 0;
+  border: 0px solid red;
+}
+
+.day-of-week {
+  position: relative;
+  display: inline-block;
+  width: 10%;
+  text-align: center;
+  margin: 0 6px 0 0;
+  padding: 3px;
+  border: 1px solid rgba(0,0,0,.5);
+  border-radius: 2px;
+  font-size: .8em;
+  /* padding: 3px; */
+}
+
+.day-of-week--on {
+  background-color: rgba(135, 199, 70, .5);
+}
+
+.day-of-week--off {
+  background-color: gray;
+  opacity: .3;
+}
+
+.no-js .js-dependent {
+  display: none;
+}
+
+.js .js-alternative {
+  display: none;
+}
+
+#no-results {
+  display: none;
+}
+
+#no-results.no-results--on {
+  display: block;
+}
+
+.object--hidden {
+  display: none;
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+h3 {
+  font-size: 1.3em;
+}

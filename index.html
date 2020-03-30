@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Find Meals</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src='js/vendor/modernizr.js'></script>
+    <script src='js/vendor/jquery-3.4.1.min.js'></script>
+    <script src='js/vendor/tabletop.min.js'></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    
+    <header title="Asheville Area Meal Sites" class="jumbotron jumbotron-fluid">
+      <div class="container position-relative">
+        <div class="jumbotron--text">
+          <h1 class="display-4 text-black">Asheville Area Meal Sites</h1>
+          <p class="lead text-black">Find locations around Asheville working to help feed our community.</p>    
+        </div>
+      </div>
+    </header>
+
+    <section title="JavaScript not detected. Options suggested." class="container mt-5 js-alternative">
+      <div id="js-warning" class="row row-cols-9 p-0">
+        <h2>This page requires JavaScript to function</h2>
+        <p>You appear to be viewing this page without JavaScript support. You have the following options:</p>
+        <ul>
+          <li>Enable JavaScript for your device / browser and reload this page</li>
+          <li><a class="map-link text-dark" href="https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml" target="_blank" rel="noopener noreferrer">View the source data for this page in spreadsheet form</a></li>
+        </ul>
+      </div>
+    </section>
+    
+    <section title="Filter meal sites based on geographical area, days open, or type of service provided." class="container mt-5 js-dependent">
+      <div id="object-filters" class="border rounded-lg py-4 px-1">
+        <div class="row">
+          <div class="col-12 mb-3 text-center">
+            <h2 class="">Refine the list with filters</h2> 
+            <p>View meal sites by geographical area, day of the week, and/or service type offered.</p>
+          </div>
+        </div>
+        <div class="row selected-filters">
+          <div class="col-lg-4 mb-3">
+
+            <div class="card inner m-3 h-100">
+              <div class="card-header"><h3>Located in...</h3></div>
+              <ul class="list-group list-group-flush" id="list-group-area">
+                <li class="list-group-item selected-filters-default-area">Any Area</li>
+              </ul>
+              <div class="p-3">
+                <label class="select-label" for="select-filter-area">Specify Location(s):</label>
+                <select name="select-filter-area" class="form-control form-control-sm mt-1" id="filter-area">
+                  <option></option>
+                </select>  
+              </div>
+            </div>
+        
+          </div>
+
+          <div class="col-lg-4 mb-3">
+
+            <div class="card inner m-3 h-100">
+
+              <div class="card-header"><h3>Open on...</h3></div>
+              <ul class="list-group list-group-flush" id="list-group-day">
+                <li class="list-group-item selected-filters-default-day">Any Day of the week</li>
+              </ul>
+              <div class="p-3">
+                <label class="select-label" for="select-filter-day">Specify Day(s) Open:</label>
+                <select name="select-filter-day" class="form-control form-control-sm mt-1" id="filter-day">
+                  <option></option>
+                </select>      
+              </div>
+              </div>
+      
+          </div>
+
+          <div class="col-lg-4 mb-3">
+
+            <div class="card inner m-3 h-100">
+              <div class="card-header"><h3>Providing...</h3></div>
+              <ul class="list-group list-group-flush" id="list-group-type">
+                <li class="list-group-item selected-filters-default-type">Any Service Type</li>
+              </ul>
+              <div class="p-3">
+                <label class="select-label" for="select-filter-type">Specify Service(s) Offered:</label>
+                <select name="select-filter-type" class="form-control form-control-sm mt-1" id="filter-type">
+                  <option></option>
+                </select>      
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="container mt-5 js-dependent" title="List of Asheville Meal Sites">
+      <div id="food-locations" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 p-0">
+
+      </div>
+    </main>
+
+    <section id="no-results" title="No results found" class="container mt-2 mb-5">
+      <div class="row p-0">
+        <div class="col-12">
+          <h2>No meal sites were found for the options selected</h2>
+          <p>You have the following options:</p>
+          <ul>
+            <li>Remove one or more of the filters you've selected above (click a filter's name in the list above the drop-down menu to remove it)</li>
+            <li>Refresh this page and start over</li>
+            <li><a class="map-link text-dark" href="https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml" target="_blank" rel="noopener noreferrer">View the source data for this page in spreadsheet form</a></li>
+          </ul>  
+        </div>
+      </div>
+    </section>
+
+    <script src='js/custom/initialize.js'></script>
+    <script src='js/custom/object-filter.js'></script>
+    
+  </body>
+</html>
