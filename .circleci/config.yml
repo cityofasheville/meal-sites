@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-s3: circleci/aws-s3@1.0.0
+  aws-s3: circleci/aws-s3@1.0.15
 
 defaults: &defaults
   docker:
@@ -17,7 +17,8 @@ jobs:
           from: ./
           to: 's3://${S3_DEPLOY_BUCKET}'
           arguments: |
-            --acl public-read
+            --acl public-read \
+            --cache-control "max-age=86400"
 workflows:
   version: 2
   build-deploy:
