@@ -10,7 +10,6 @@ jobs:
   build-prod:
     <<: *defaults
     steps:
-      - checkout
       - aws-s3/sync:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
@@ -19,6 +18,8 @@ jobs:
           to: 's3://${S3_DEPLOY_BUCKET}'
           arguments: |
             --acl public-read
+workflows:
+  version: 2
   build-deploy:
     jobs:
       - build-prod:
