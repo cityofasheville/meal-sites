@@ -16,7 +16,7 @@ function showInfo(data, tabletop) {
   let cardSelectors = '';
   let typeLabel = '';
   let sanitizedValue = '';
-  // let todaysDate = new Date();
+  let todaysDate = new Date();
   // var startDate = new Date();
   // var endDate = new Date;
   let thisObject = {};
@@ -41,7 +41,7 @@ function showInfo(data, tabletop) {
 
   window.filterSelectors = [];
 
-  // console.log(data);
+  console.log(todaysDate);
   // console.log(window);
 
   data.forEach((obj) => {
@@ -49,23 +49,21 @@ function showInfo(data, tabletop) {
     cardSelectors = '';
     rowHasRoom = objCount % 3;
 
-    // if (obj.startDate.trim()) {
-    //   startDate = new Date(obj.startDate);
-    // } 
-    // if (obj.endDate.trim()) {
-    //   endDate = new Date(obj.endDate);
-    // } 
+    if (obj.startDate.trim()) {
+      startDate = new Date(obj.startDate);
+    } 
+    else {
+      startDate = new Date('3/1/2020');
+    }
 
+    if (obj.endDate.trim()) {
+      endDate = new Date(obj.endDate);
+    } 
+    else {
+      endDate = new Date('1/1/2100');
+    }
     
-    // if(GivenDate > CurrentDate){
-    //     alert('Given date is greater than the current date.');
-    // }else{
-    //     alert('Given date is not greater than the current date.');
-    // }    
-    
-    // console.log(startDate + ' - ' + endDate);
-    
-    if (obj.endDate.trim() !== '3/29/2020') {
+    if ( (todaysDate < endDate) && (todaysDate > startDate) ) {
 
       if (obj.generalArea.trim()) {
 

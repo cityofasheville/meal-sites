@@ -145,6 +145,9 @@ class ObjectFilter {
 
     });
 
+    // this.filterSelections.matchedIDs holds the IDs matching current filters (use for custom print page)
+    // console.log(this.filterSelections.matchedIDs);
+
     // Hide all thumbnails so we have a clean slate
     this.allObjects.addClass("object--hidden");
 
