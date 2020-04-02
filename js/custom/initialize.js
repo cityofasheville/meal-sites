@@ -17,6 +17,7 @@ function showInfo(data, tabletop) {
   let typeLabel = '';
   let sanitizedValue = '';
   let todaysDate = new Date();
+  todaysDate.setHours(0,0,0,0);
   // var startDate = new Date();
   // var endDate = new Date;
   let thisObject = {};
@@ -27,6 +28,9 @@ function showInfo(data, tabletop) {
   let dayClassF = '';
   let dayClassSa = '';
   let dayClassSu = '';
+  let hoursOpen = '';
+  let daysOpen = '';
+  let serviceIcon = ''
 
 
 
@@ -41,8 +45,8 @@ function showInfo(data, tabletop) {
 
   window.filterSelectors = [];
 
-  console.log(todaysDate);
-  // console.log(window);
+  // console.log(todaysDate);
+  console.log(data);
 
   data.forEach((obj) => {
 
@@ -63,7 +67,9 @@ function showInfo(data, tabletop) {
       endDate = new Date('1/1/2100');
     }
     
-    if ( (todaysDate < endDate) && (todaysDate > startDate) ) {
+    // console.log(`${obj.GEOID} | ${todaysDate} | ${startDate} - ${ obj.endDate.trim() ? endDate : ''}`);
+
+    if ( (todaysDate <= endDate) && (todaysDate >= startDate) && obj.name.trim() ) {
 
       if (obj.generalArea.trim()) {
 
@@ -182,7 +188,55 @@ function showInfo(data, tabletop) {
       else {
         dayClassSu = 'day-of-week--off';
       }
-  
+
+      if ( !obj.startTime.trim() && !obj.endTime.trim() ) {
+        obj.hoursOpen = 'Hours not specified';
+      }
+      else if ( obj.startTime.trim() && !obj.endTime.trim() ) {
+        obj.hoursOpen = `${obj.startTime} onward`;
+      }
+      else if ( !obj.startTime.trim() && obj.endTime.trim() ) {
+        obj.hoursOpen = `Until ${obj.endTime}`;
+      }
+      else {
+        obj.hoursOpen = `${obj.startTime} - ${obj.endTime}`;
+      }
+      
+      if ( !obj.startDate.trim() && !obj.endDate.trim() ) {
+        obj.daysOpen = 'Dates not specified';
+      }
+      else if ( obj.startDate.trim() && !obj.endDate.trim() ) {
+        obj.daysOpen = `${moment(startDate).format("MMMM Do")} onward`;
+      }
+      else if ( !obj.startDate.trim() && obj.endDate.trim() ) {
+        obj.daysOpen = `Effective until ${moment(endDate).format("MMMM Do")}`;
+      }
+      else {
+        if ( obj.startDate.trim() === obj.endDate.trim() ) {
+          obj.daysOpen = `${moment(startDate).format("MMMM Do")} Only`;
+        }
+        else {
+          obj.daysOpen = `${moment(startDate).format("MMMM Do")} - ${moment(endDate).format("MMMM Do")}`;
+        }
+      }
+
+      switch ( obj.type.trim() ) {
+        case "Students":
+          obj.serviceIcon = `<i class="fas fa-utensils service-student"></i>`;
+          break;
+        case "Delivery Site":
+          obj.serviceIcon = `<i class="fas fa-truck-loading service-delivery"></i>`;
+          break;
+        case "Meal Pickup":
+          obj.serviceIcon = `<i class="fas fa-toolbox service-meal"></i>`;
+          break;
+        case "Food Box Pickup":
+          obj.serviceIcon = `<i class="fas fa-shopping-basket service-foodbox"></i>`;
+          break;
+        default:
+          obj.serviceIcon = "";
+      }
+        
       obj.selectors = cardSelectors;
       obj.styleM = dayClassM;
       obj.styleT = dayClassT;
@@ -243,7 +297,7 @@ function addCard(o,rowMod) {
         <div class="card-header"><h3>${o.name}</h3></div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">${o.generalArea}</li>
-          <li class="list-group-item">Service: ${o.type === 'Students' ? 'Student Meals' : o.type}</li>
+          <li class="list-group-item">${o.serviceIcon} ${o.type === 'Students' ? 'Student Meals' : o.type}</li>
           <li class="list-group-item">
             <ul class="week-list" aria-label="Days of the week">
               <li class="day-of-week ${o.styleM}" title="${o.name} ${o.type} service is ${o.styleM === 'day-of-week--on' ? 'open' : 'closed'} on Monday"><span class="day-label">M</span></li>
@@ -255,11 +309,30 @@ function addCard(o,rowMod) {
               <li class="day-of-week ${o.styleSu}" title="${o.name} ${o.type} service is ${o.styleSu === 'day-of-week--on' ? 'open' : 'closed'} on Sunday"><span class="day-label">Su</span></li>
             </ul>
           </li>          
-          <li class="list-group-item">Open from ${o.startTime} - ${o.endTime}</li>
+          <li class="list-group-item">${o.hoursOpen}<br />${o.daysOpen}</li>
           <li class="list-group-item"><a class="map-link text-dark" href="https://www.google.com/maps/search/${q}" title="View location of ${o.name} on a Google Map" target="_blank">Location</a>: ${o.address}</li>
         </ul>
       </div>
     </div>
+  `;
+
+  document.getElementById('food-locations-print').innerHTML += `
+    <tr class="all-objects object-${o.GEOID} ${o.selectors}">
+      <td><h3>${o.name}</h3>${o.serviceIcon} ${o.type === 'Students' ? 'Student Meals' : o.type}</td>
+      <td>
+        <ul class="week-list week-list--print" aria-label="Days of the week">
+          <li class="day-of-week ${o.styleM}" title="${o.name} ${o.type} service is ${o.styleM === 'day-of-week--on' ? 'open' : 'closed'} on Monday"><span class="day-label">M</span></li>
+          <li class="day-of-week ${o.styleT}" title="${o.name} ${o.type} service is ${o.styleT === 'day-of-week--on' ? 'open' : 'closed'} on Tuesday"><span class="day-label">T</span></li>
+          <li class="day-of-week ${o.styleW}" title="${o.name} ${o.type} service is ${o.styleW === 'day-of-week--on' ? 'open' : 'closed'} on Wednesday"><span class="day-label">W</span></li>
+          <li class="day-of-week ${o.styleTh}" title="${o.name} ${o.type} service is ${o.styleTh === 'day-of-week--on' ? 'open' : 'closed'} on Thursday"><span class="day-label">Th</span></li>
+          <li class="day-of-week ${o.styleF}" title="${o.name} ${o.type} service is ${o.styleF === 'day-of-week--on' ? 'open' : 'closed'} on Friday"><span class="day-label">F</span></li>
+          <li class="day-of-week ${o.styleSa}" title="${o.name} ${o.type} service is ${o.styleSa === 'day-of-week--on' ? 'open' : 'closed'} on Saturday"><span class="day-label">Sa</span></li>
+          <li class="day-of-week ${o.styleSu}" title="${o.name} ${o.type} service is ${o.styleSu === 'day-of-week--on' ? 'open' : 'closed'} on Sunday"><span class="day-label">Su</span></li>
+        </ul>
+        ${o.hoursOpen} | ${o.daysOpen}
+      </td>
+      <td>Area: ${o.generalArea}<br /><a class="map-link text-dark" href="https://www.google.com/maps/search/${q}" title="View location of ${o.name} on a Google Map" target="_blank">${o.address}</a></td>
+    </tr>
   `;
 
 }      

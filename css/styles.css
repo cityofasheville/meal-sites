@@ -95,6 +95,10 @@
   border: 0px solid red;
 }
 
+.week-list--print {
+
+}
+
 .day-of-week {
   position: relative;
   display: inline-block;
@@ -133,6 +137,17 @@
   display: block;
 }
 
+.table-print {
+  border: 1px solid rgba(0,0,0,.5);
+  margin: 2rem 0;
+}
+
+.table-print th, .table-print td {
+  border: 1px solid rgba(0,0,0,.5);
+  padding: 10px 5px;
+  width: 33.33%;
+}
+
 .object--hidden {
   display: none;
 }
@@ -152,6 +167,42 @@ h3 {
 .sub-heading {
   font-size: 1em;
 }  
+
+.service-student, 
+.service-delivery, 
+.service-meal, 
+.service-foodbox {
+  font-size: 1.5em;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.table-print .service-student, 
+.table-print .service-delivery, 
+.table-print .service-meal, 
+.table-print .service-foodbox {
+  font-size: 1em;
+}
+
+.service-student {
+  color: purple;
+  border: 1px solid purple;
+}
+
+.service-delivery {
+  color: cornflowerblue;
+  border: 1px solid cornflowerblue;
+}
+
+.service-meal {
+  color: red;
+  border: 1px solid red;
+}
+
+.service-foodbox {
+  color: orange;
+  border: 1px solid orange;
+}
 
 
 @media (min-width: 576px) { 

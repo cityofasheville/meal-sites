@@ -21,6 +21,8 @@
     <script src='js/vendor/modernizr.js'></script>
     <script src='js/vendor/jquery-3.4.1.min.js'></script>
     <script src='js/vendor/tabletop.min.js'></script>
+    <script src='js/vendor/moment.min.js'></script>
+    <script src="https://kit.fontawesome.com/02e31fba3b.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
   </head>
@@ -31,7 +33,7 @@
 
     <!-- Deploy test after "from" directory value changed -->
     
-    <header title="Asheville Area Meal Sites" class="jumbotron jumbotron-fluid">
+    <header title="Asheville Area Meal Sites" class="jumbotron jumbotron-fluid no-print">
       <div class="container position-relative">
         <div class="jumbotron--text">
           <h1 class="text-black">Buncombe County Area Meal Sites</h1>
@@ -46,7 +48,7 @@
       </div>
     </header>
 
-    <section title="JavaScript not detected. Options suggested." class="container mt-5 js-alternative">
+    <section title="JavaScript not detected. Options suggested." class="container mt-5 js-alternative no-print">
       <div id="js-warning" class="row row-cols-9 p-0">
         <h2>This page requires JavaScript to function</h2>
         <p>You appear to be viewing this page without JavaScript support. You have the following options:</p>
@@ -57,13 +59,12 @@
       </div>
     </section>
     
-    <section title="Filter meal sites based on geographical area, days open, or type of service provided." class="container mt-5 js-dependent">
+    <section title="Filter meal sites based on geographical area, days open, or type of service provided." class="container mt-5 js-dependent no-print">
       <div id="object-filters" class="border rounded-lg py-4 px-1">
         <div class="row">
           <div class="col-12 mb-3 text-center">
             <h2 class="">Refine the list with filters</h2> 
             <p>View meal sites by geographical area, day of the week, and/or service type offered.</p>
-            <p><a class="map-link text-dark" href="https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml" target="_blank" rel="noopener noreferrer">View the source data for this page in spreadsheet form</a></p>
           </div>
         </div>
         <div class="row selected-filters">
@@ -122,10 +123,33 @@
       </div>
     </section>
 
-    <main class="container mt-5 js-dependent" title="List of Asheville Meal Sites">
+    <section title="Choose alternate views" class="container js-dependent">
+      <div class="row mt-4">
+        <div class="col-12 text-center">
+          <p>
+            <a class="map-link text-dark" title="View meal sites in printable table form" id="show-print" href="#">Print View</a>
+            <a class="map-link text-dark object--hidden" title="View meal sites in printable table form" id="print-return" href="#">Return to Web View</a> |
+            <a class="map-link text-dark" title="View meal sites on an interactive map" href="http://mealmap.ashevillenc.gov/" target="_blank" rel="noopener noreferrer">View interactive map</a>
+          </p>
+        </div>
+      </div>    
+    </section>
+
+    <main title="List of Asheville Meal Sites" class="container mt-5 js-dependent no-print">
       <div id="food-locations" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 p-0">
 
       </div>
+    </main>
+
+    <main title="List of Asheville Meal Sites - Printable Layout" class="container mt-5 js-dependent print-view object--hidden">
+      <table id="food-locations-print" width="100%" class="table-print">
+        <caption>List of Asheville Meal Sites - Printable Layout</caption>
+        <thead>
+          <th scope="col">Location and Service</th>
+          <th scope="col">Schedule</th>
+          <th scope="col">Location</th>
+        </thead>
+      </table>
     </main>
 
     <section id="no-results" title="No results found" class="container mt-2 mb-5">
@@ -137,6 +161,7 @@
             <li>Remove one or more of the filters you've selected above (click a filter's name in the list above the drop-down menu to remove it)</li>
             <li>Refresh this page and start over</li>
             <li><a class="map-link text-dark" href="https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml" target="_blank" rel="noopener noreferrer">View the source data for this page in spreadsheet form</a></li>
+            <li><a class="map-link text-dark" title="View meal sites on an interactive map" href="http://mealmap.ashevillenc.gov/" target="_blank" rel="noopener noreferrer">View interactive map</a></li>
           </ul>  
         </div>
       </div>

@@ -8,6 +8,8 @@ class ObjectFilter {
     this.selectArea = $("#filter-area");
     this.selectDay = $("#filter-day");
     this.selectType = $("#filter-type");
+    this.showPrint =  $("#show-print");
+    this.printReturn =  $("#print-return");
     this.showAll =  $("#show-all");
 
     // this.isFilterVisible = true;
@@ -91,6 +93,21 @@ class ObjectFilter {
       this.filterSelections.matchedIDs.length = 0;
       this.filterSelections.objectSelectors = '';
     })
+
+    this.showPrint.on("click", () => {
+      this.printToggle();
+    })
+
+    this.printReturn.on("click", () => {
+      this.printToggle();
+    })
+  }
+
+  printToggle() {
+    $(`.no-print`).toggleClass("object--hidden");
+    $(`.print-view`).toggleClass("object--hidden");
+    $(`#show-print`).toggleClass("object--hidden");
+    $(`#print-return`).toggleClass("object--hidden");
   }
 
   // Method to scan state object and refresh display with matched items
