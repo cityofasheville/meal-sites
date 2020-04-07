@@ -1,0 +1,10 @@
+.table-print {
+  border: 1px solid rgba(0,0,0,.5);
+  margin: 2rem 0;
+}
+
+.table-print th, .table-print td {
+  border: 1px solid rgba(0,0,0,.5);
+  padding: 10px 5px;
+  width: 33.33%;
+}

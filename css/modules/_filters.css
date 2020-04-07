@@ -1,0 +1,29 @@
+.selected-filters-default-area,
+.selected-filters-default-day,
+.selected-filters-default-type {
+  font-size: .9em;
+}
+
+.filter-button {
+  background-color: rgba(17, 122, 170, 0.2);
+  font-size: .9em;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: rgba(233, 59, 36,.5);
+}
+
+.filter-button:hover::after {
+  content: ' [remove filter]';
+}
+
+.filter-remove {
+  font-size: .75em;
+  display: none;
+}
+
+.filter-button:hover .filter-remove {
+  display: inline-block;
+}
+

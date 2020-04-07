@@ -162,6 +162,10 @@ class ObjectFilter {
 
     });
 
+    console.log('Refreshing Filters:');
+    console.log(this.filterSelections.matchedIDs);
+    console.log(this.filterSelections.objectSelectors);
+
     // this.filterSelections.matchedIDs holds the IDs matching current filters (use for custom print page)
     // console.log(this.filterSelections.matchedIDs);
 
@@ -189,6 +193,8 @@ class ObjectFilter {
       // Push newly selected filter onto the value and label arrays
       this.filterSelections[`${thisSelectedType}Keys`].push(thisSelectedObject.val());
       this.filterSelections[`${thisSelectedType}Labels`].push(thisSelectedObject.children("option:selected").text());
+
+      console.log('Adding Filter - ' + thisSelectedType);
 
       this.filtersRefresh();
 

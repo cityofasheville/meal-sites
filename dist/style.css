@@ -1,0 +1,266 @@
+
+.jumbotron {
+  background: url(/images/food.jpg?600a977c05e7c5cf471cd29781801c0f) no-repeat center center fixed;
+  background-size: cover;  
+  opacity: 1;
+  position: relative;
+  padding: 12em 0; 
+}
+
+.jumbotron--text {
+  z-index: 999;
+  position: absolute;
+  display: block;
+  text-align: center;
+  padding: 2rem 1rem;
+  width: 85%;
+  max-width: 760px;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  border: 2px solid black;
+  border-radius: 15px;
+  opacity: .83;
+}
+
+.container--jumbo {
+  width: 100%;
+  border: 2px solid red;
+}
+
+.container--filter {
+  border: 12px solid rgba(0,0,0,.5);
+}
+
+.select-label {
+  margin: 0;
+  font-size: .9em;
+}
+
+.map-link {
+  text-decoration: underline;
+}
+
+.no-js .js-dependent {
+  display: none;
+}
+
+.js .js-alternative {
+  display: none;
+}
+
+#no-results {
+  display: none;
+}
+
+#no-results.no-results--on {
+  display: block;
+}
+
+.object--hidden {
+  display: none;
+}
+
+.selected-filters-default-area,
+.selected-filters-default-day,
+.selected-filters-default-type {
+  font-size: .9em;
+}
+
+.filter-button {
+  background-color: rgba(17, 122, 170, 0.2);
+  font-size: .9em;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: rgba(233, 59, 36,.5);
+}
+
+.filter-button:hover::after {
+  content: ' [remove filter]';
+}
+
+.filter-remove {
+  font-size: .75em;
+  display: none;
+}
+
+.filter-button:hover .filter-remove {
+  display: inline-block;
+}
+
+h1 {
+
+  font-size: 1.6em;
+}
+
+@media (min-width: 576px) {
+
+h1 {
+    font-size: 1.8em
+}
+  }
+
+@media (min-width: 768px) {
+
+h1 {
+    font-size: 2.2em
+}
+  }
+
+@media (min-width: 992px) {
+
+h1 {
+    font-size: 2.5em
+}
+  }
+
+h2 {
+
+  font-size: 1.3em;
+}
+
+@media (min-width: 576px) {
+
+h2 {
+    font-size: 1.5em
+}
+  }
+
+@media (min-width: 768px) {
+
+h2 {
+    font-size: 1.6em
+}
+  }
+
+@media (min-width: 992px) {
+
+h2 {
+    font-size: 1.8em
+}
+  }
+
+h3 {
+
+  font-size: 1.1em;
+}
+
+@media (min-width: 576px) {
+
+h3 {
+    font-size: 1.2em
+}
+  }
+
+@media (min-width: 768px) {
+
+h3 {
+    font-size: 1.25em
+}
+  }
+
+@media (min-width: 992px) {
+
+h3 {
+    font-size: 1.3em
+}
+  }
+
+.sub-heading {
+
+  font-size: 1em;
+}
+
+@media (min-width: 768px) {
+
+.sub-heading {
+    font-size: 1.1em
+}
+  }
+
+@media (min-width: 992px) {
+
+.sub-heading {
+    font-size: 1.2em
+}
+  }
+
+.service-student, 
+.service-delivery, 
+.service-meal, 
+.service-foodbox {
+  font-size: 1.5em;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.service-student {
+  color: purple;
+  border: 1px solid purple;
+}
+
+.service-delivery {
+  color: cornflowerblue;
+  border: 1px solid cornflowerblue;
+}
+
+.service-meal {
+  color: red;
+  border: 1px solid red;
+}
+
+.service-foodbox {
+  color: orange;
+  border: 1px solid orange;
+}
+
+.table-print .service-student, 
+.table-print .service-delivery, 
+.table-print .service-meal, 
+.table-print .service-foodbox {
+  font-size: 1em;
+}
+
+.week-list {
+  list-style: none;
+  text-align: left;
+  list-style-type: none;
+  padding: 0;
+  border: 0px solid red;
+}
+
+.day-of-week {
+  position: relative;
+  display: inline-block;
+  width: 10%;
+  text-align: center;
+  margin: 0 6px 0 0;
+  padding: 3px;
+  border: 1px solid rgba(0,0,0,.5);
+  border-radius: 2px;
+  font-size: .8em;
+  /* padding: 3px; */
+}
+
+.day-of-week--on {
+  background-color: rgba(135, 199, 70, .5);
+}
+
+.day-of-week--off {
+  background-color: gray;
+  opacity: .3;
+}
+
+.table-print {
+  border: 1px solid rgba(0,0,0,.5);
+  margin: 2rem 0;
+}
+
+.table-print th, .table-print td {
+  border: 1px solid rgba(0,0,0,.5);
+  padding: 10px 5px;
+  width: 33.33%;
+}

@@ -1,0 +1,63 @@
+h1 {
+
+  font-size: 1.6em;
+
+  @mixin atSmall {
+    font-size: 1.8em;
+  }
+
+  @mixin atMedium {
+    font-size: 2.2em;
+  }
+
+  @mixin atLarge {
+    font-size: 2.5em;
+  }
+}
+
+h2 {
+
+  font-size: 1.3em;
+
+  @mixin atSmall {
+    font-size: 1.5em;
+  }
+
+  @mixin atMedium {
+    font-size: 1.6em;
+  }
+
+  @mixin atLarge {
+    font-size: 1.8em;
+  }
+}
+
+h3 {
+
+  font-size: 1.1em;
+
+  @mixin atSmall {
+    font-size: 1.2em;
+  }
+
+  @mixin atMedium {
+    font-size: 1.25em;
+  }
+
+  @mixin atLarge {
+    font-size: 1.3em;
+  }
+}
+
+.sub-heading {
+
+  font-size: 1em;
+
+  @mixin atMedium {
+    font-size: 1.1em;
+  }
+
+  @mixin atLarge {
+    font-size: 1.2em;
+  }
+}

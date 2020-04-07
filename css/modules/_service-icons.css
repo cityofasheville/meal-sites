@@ -1,0 +1,36 @@
+.service-student, 
+.service-delivery, 
+.service-meal, 
+.service-foodbox {
+  font-size: 1.5em;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.service-student {
+  color: purple;
+  border: 1px solid purple;
+}
+
+.service-delivery {
+  color: cornflowerblue;
+  border: 1px solid cornflowerblue;
+}
+
+.service-meal {
+  color: red;
+  border: 1px solid red;
+}
+
+.service-foodbox {
+  color: orange;
+  border: 1px solid orange;
+}
+
+.table-print .service-student, 
+.table-print .service-delivery, 
+.table-print .service-meal, 
+.table-print .service-foodbox {
+  font-size: 1em;
+}
+

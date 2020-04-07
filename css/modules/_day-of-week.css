@@ -1,0 +1,29 @@
+.week-list {
+  list-style: none;
+  text-align: left;
+  list-style-type: none;
+  padding: 0;
+  border: 0px solid red;
+}
+
+.day-of-week {
+  position: relative;
+  display: inline-block;
+  width: 10%;
+  text-align: center;
+  margin: 0 6px 0 0;
+  padding: 3px;
+  border: 1px solid rgba(0,0,0,.5);
+  border-radius: 2px;
+  font-size: .8em;
+  /* padding: 3px; */
+}
+
+.day-of-week--on {
+  background-color: rgba(135, 199, 70, .5);
+}
+
+.day-of-week--off {
+  background-color: gray;
+  opacity: .3;
+}
