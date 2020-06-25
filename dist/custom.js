@@ -235,6 +235,9 @@ function showInfo(data, tabletop) {
         case "Food Box Pickup":
           obj.serviceIcon = `<i class="fas fa-shopping-basket service-foodbox"></i>`;
           break;
+        case "Farmers Market":
+          obj.serviceIcon = `<i class="fas fa-tractor service-farmersmarket"></i>`;
+          break;
         default:
           obj.serviceIcon = "";
       }
@@ -558,4 +561,4 @@ class ObjectFilter {
 // wait a couple seconds for external data to load before instantiating
 setTimeout(function() { 
   var objectFilter = new ObjectFilter; 
-}, 2000);
+}, 2900);

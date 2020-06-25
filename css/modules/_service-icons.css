@@ -1,6 +1,7 @@
 .service-student, 
 .service-delivery, 
 .service-meal, 
+.service-farmersmarket, 
 .service-foodbox {
   font-size: 1.5em;
   padding: 5px;
@@ -25,6 +26,11 @@
 .service-foodbox {
   color: orange;
   border: 1px solid orange;
+}
+
+.service-farmersmarket {
+  color: green;
+  border: 1px solid green;
 }
 
 .table-print .service-student, 

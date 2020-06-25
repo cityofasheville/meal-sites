@@ -212,4 +212,4 @@ class ObjectFilter {
 // wait a couple seconds for external data to load before instantiating
 setTimeout(function() { 
   var objectFilter = new ObjectFilter; 
-}, 2000);
+}, 2900);
