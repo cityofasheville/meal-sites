@@ -15,12 +15,11 @@ function init() {
 function showInfo(data, tabletop) {
   
   let objCount = 0;
-  let rowHasRoom = 0;
   let cardSelectors = '';
   let typeLabel = '';
   let sanitizedValue = '';
   let todaysDate = new Date();
-  todaysDate.setHours(0,0,0,0);
+      todaysDate.setHours(0,0,0,0);
   let thisObject = {};
   let dayClassM = '';
   let dayClassT = '';
@@ -31,9 +30,7 @@ function showInfo(data, tabletop) {
   let dayClassSu = '';
   let hoursOpen = '';
   let daysOpen = '';
-  let serviceIcon = ''
-
-
+  let serviceIcon = '';
 
   window.filterOptions = {
     areaLabels: [],
@@ -45,30 +42,36 @@ function showInfo(data, tabletop) {
   };
 
   window.filterSelectors = [];
+  window.foodLocationsHTML = '';
+  window.foodLocationsPrintHTML = '';
 
-  // console.log(todaysDate);
-  // console.log(data);
+  for (let obj of data) {
 
-  data.forEach((obj) => {
+  // ditching foreach b/c we need to break the loop on encountering empty row
+  // data.forEach( (obj) => {
+
+    // If we hit a blank line (no name), assume EOF (spreadsheet is pre-populated with rows/IDs for future entries)
+    if ( !obj.name ) {
+      break;
+    }
 
     cardSelectors = '';
-    rowHasRoom = objCount % 3;
 
-    if (obj.startDate.trim()) {
+    if ( obj.startDate.trim() ) {
       startDate = new Date(obj.startDate);
     } 
     else {
       startDate = new Date('3/1/2020');
     }
 
-    if (obj.endDate.trim()) {
+    if ( obj.endDate.trim() ) {
       endDate = new Date(obj.endDate);
     } 
     else {
       endDate = new Date('1/1/2100');
     }
     
-    // console.log(`${obj.geoid} | ${todaysDate} | ${startDate} - ${ obj.endDate.trim() ? endDate : ''}`);
+    // console.log(`${obj.geoid} | ${obj.name} | ${startDate}`);
 
     if ( (todaysDate <= endDate) && (todaysDate >= startDate) && obj.name.trim() ) {
     // if (obj.name.trim()) {
@@ -258,19 +261,19 @@ function showInfo(data, tabletop) {
   
       window.filterSelectors.push(thisObject);
   
-      addCard(obj,rowHasRoom);
+      addCard(obj);
   
       objCount++;
   
     }
 
-
     // let startDate = null;
     // let endDate = null;
-  
-  });
+  }
+  // Below closing left over from data.foreach() <- not using that b/c we need to break the loop
+  // });
 
-  // console.log(window.filterSelectors);
+  console.log(window.filterSelectors);
 
   let areaOptions = '';
   for (let i=0; i < window.filterOptions.areaValues.length; i++) {
@@ -290,13 +293,19 @@ function showInfo(data, tabletop) {
   }
   document.getElementById('filter-type').innerHTML += typeOptions;
 
+  document.getElementById('food-locations').innerHTML = window.foodLocationsHTML;
+  document.getElementById('food-locations-print').innerHTML = window.foodLocationsPrintHTML;
+  
+  var objectFilter = new ObjectFilter; 
+  console.log(objectFilter);
+
 }
 
-function addCard(o,rowMod) {
+function addCard(o) {
 
   let q = encodeURIComponent(o.address);
 
-  document.getElementById('food-locations').innerHTML += `
+  window.foodLocationsHTML += `
     <div class="col p-0 mb-5 all-objects object-${o.geoid} ${o.selectors}">
       <div class="card inner m-3 h-100">
         <div class="card-header"><h3>${o.name}</h3></div>
@@ -321,7 +330,7 @@ function addCard(o,rowMod) {
     </div>
   `;
 
-  document.getElementById('food-locations-print').innerHTML += `
+  window.foodLocationsPrintHTML += `
     <tr class="all-objects object-${o.geoid} ${o.selectors}">
       <td><h3>${o.name}</h3>${o.serviceIcon} ${o.type === 'Students' ? 'Student Meals' : o.type}</td>
       <td>
@@ -344,8 +353,13 @@ function addCard(o,rowMod) {
 
 const test = document.addEventListener('DOMContentLoaded', init);
 
-console.log('Export spot');
-console.log(init);
+console.log('Initializing now...');
+
+// setTimeout(function() { 
+//   var objectFilter = new ObjectFilter; 
+//   console.log(objectFilter);
+// }, 2900);
+
 
 
 class ObjectFilter {
@@ -559,6 +573,3 @@ class ObjectFilter {
 }
 
 // wait a couple seconds for external data to load before instantiating
-setTimeout(function() { 
-  var objectFilter = new ObjectFilter; 
-}, 2900);
