@@ -1,18 +1,35 @@
 // var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml';
 
-// https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/edit#gid=1442269742
+// https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/
+
+// NOTE: the below URL assignment uses a query string to output CSV-style data for consumpption by papaparse
+// https://support.google.com/docs/thread/56845119?hl=en&msgid=63716290
+// It is possible that Google could kill this method as well (RB, 21-Aug-2020)
+
+const public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/gviz/tq?tqx=out:csv&sheet=Sheet1';
+
 
 function init() {
-  Tabletop.init( { 
-    key: '1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo',
-    callback: showInfo,
-    orderby: 'startTime',
-    debug: true,
-    simpleSheet: true
-  } )
+  Papa.parse(public_spreadsheet_url, {
+    download: true,
+    header: true,
+    complete: showInfo
+  })
 }
 
-function showInfo(data, tabletop) {
+// function init() {
+//   Tabletop.init( { 
+//     key: '1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo',
+//     callback: showInfo,
+//     orderby: 'startTime',
+//     debug: true,
+//     simpleSheet: true
+//   } )
+// }
+
+function showInfo(results) {
+
+  let data = results.data
   
   let objCount = 0;
   let cardSelectors = '';
@@ -262,6 +279,7 @@ function showInfo(data, tabletop) {
       window.filterSelectors.push(thisObject);
   
       addCard(obj);
+      console.log(obj);
   
       objCount++;
   
