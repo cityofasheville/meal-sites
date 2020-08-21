@@ -64,7 +64,7 @@ function showInfo(results) {
 
   for (let obj of data) {
 
-  // ditching foreach b/c we need to break the loop on encountering empty row
+  // NOTE: ditching foreach b/c we need to break the loop on encountering empty row
   // data.forEach( (obj) => {
 
     // If we hit a blank line (no name), assume EOF (spreadsheet is pre-populated with rows/IDs for future entries)
@@ -279,8 +279,7 @@ function showInfo(results) {
       window.filterSelectors.push(thisObject);
   
       addCard(obj);
-      console.log(obj);
-  
+
       objCount++;
   
     }
@@ -314,6 +313,7 @@ function showInfo(results) {
   document.getElementById('food-locations').innerHTML = window.foodLocationsHTML;
   document.getElementById('food-locations-print').innerHTML = window.foodLocationsPrintHTML;
   
+  // Now that all incoming data is processed, instantiate the filter object
   var objectFilter = new ObjectFilter; 
   console.log(objectFilter);
 
