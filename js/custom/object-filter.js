@@ -208,5 +208,3 @@ class ObjectFilter {
   } // end filtersAdd()
 
 }
-
-// wait a couple seconds for external data to load before instantiating

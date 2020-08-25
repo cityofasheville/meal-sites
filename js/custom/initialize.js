@@ -1,36 +1,42 @@
-// var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml';
+// Spreadsheet: https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/
 
-// https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/
+// Public HTML version: https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml
 
-// NOTE: the below URL assignment uses a query string to output CSV-style data for consumpption by papaparse
+// NOTE: the below URL assignment uses a query string to output CSV-style data for consumption by papaparse
 // https://support.google.com/docs/thread/56845119?hl=en&msgid=63716290
 // It is possible that Google could kill this method as well (RB, 21-Aug-2020)
 
 const public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/gviz/tq?tqx=out:csv&sheet=Sheet1';
 
-
 function init() {
   Papa.parse(public_spreadsheet_url, {
     download: true,
     header: true,
+    error: showError,
     complete: showInfo
   })
 }
 
-// function init() {
-//   Tabletop.init( { 
-//     key: '1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo',
-//     callback: showInfo,
-//     orderby: 'startTime',
-//     debug: true,
-//     simpleSheet: true
-//   } )
-// }
+function showError(err, eFile) {
+  let displayMsg = `
+    <div class="col-12">
+      <h2>Error Report</h2>
+      <p>There was an problem retrieving data from the source. Please contact City of Asheville IT Services for assistance. (help@ashevillenc.gov | 828-251-4000)</p>
+      <p>${err}</p>
+      <p>Spreadsheet target: ${public_spreadsheet_url}</p>
+      <p>File details: ${eFile}</p>
+    </div>
+  `;
+  document.getElementById("object-filters").innerHTML = '';
+  document.getElementById("object-filters").className = ''
+  document.getElementById("view-switcher").innerHTML = '';
+  document.getElementById("food-locations").className = 'row';
+  document.getElementById("food-locations").innerHTML = displayMsg;
+}
 
 function showInfo(results) {
 
   let data = results.data
-  
   let objCount = 0;
   let cardSelectors = '';
   let typeLabel = '';
@@ -64,8 +70,7 @@ function showInfo(results) {
 
   for (let obj of data) {
 
-  // NOTE: ditching foreach b/c we need to break the loop on encountering empty row
-  // data.forEach( (obj) => {
+  // NOTE: ditching foreach loop b/c we need to break the loop on encountering empty row
 
     // If we hit a blank line (no name), assume EOF (spreadsheet is pre-populated with rows/IDs for future entries)
     if ( !obj.name ) {
@@ -287,8 +292,6 @@ function showInfo(results) {
     // let startDate = null;
     // let endDate = null;
   }
-  // Below closing left over from data.foreach() <- not using that b/c we need to break the loop
-  // });
 
   console.log(window.filterSelectors);
 

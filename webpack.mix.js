@@ -18,7 +18,6 @@ mix.postCss('css/style.css', 'dist/', [require('postcss-import')(),require('post
 mix.scripts([
     'js/vendor/modernizr.js',
     'js/vendor/jquery-3.4.1.min.js',
-    'js/vendor/tabletop.min.js',
     'js/vendor/papaparse.min.js',
     'js/vendor/moment.min.js'
 ], 'dist/vendor.js');
