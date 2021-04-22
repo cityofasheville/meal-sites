@@ -117,7 +117,7 @@ class ObjectFilter {
     let remainingWorks = this.objectID.slice();
     let matchingWorks = [];
 
-    //console.log(remainingWorks);
+    console.log(remainingWorks);
 
     // for each possible property, look for user-selected filters
     this.filterProperties.forEach( (property) => {

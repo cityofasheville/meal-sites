@@ -263,6 +263,18 @@ function showInfo(results) {
         case "Farmers Market":
           obj.serviceIcon = `<i class="fas fa-tractor service-farmersmarket"></i>`;
           break;
+        case "Senior Meals":
+          obj.serviceIcon = `<i class="fab fa-stripe-s service-seniormeals"></i>`;
+          break;
+        case "EBT Groceries":
+          obj.serviceIcon = `<i class="far fa-credit-card service-ebtgroceries"></i>`;
+          break;
+        case "WIC Groceries":
+          obj.serviceIcon = `<i class="fas fa-baby service-wicgroceries"></i>`;
+          break;
+        case "Community Gardens":
+          obj.serviceIcon = `<i class="fas fa-seedling service-communitygardens"></i>`;
+          break;
         default:
           obj.serviceIcon = "";
       }
@@ -288,11 +300,9 @@ function showInfo(results) {
       objCount++;
   
     }
-
-    // let startDate = null;
-    // let endDate = null;
   }
 
+  console.log('-- Filter Selectors on the Window --');
   console.log(window.filterSelectors);
 
   let areaOptions = '';
@@ -318,8 +328,9 @@ function showInfo(results) {
   
   // Now that all incoming data is processed, instantiate the filter object
   var objectFilter = new ObjectFilter; 
+  
+  console.log('-- Fresh ObjectFilter, post-initialization --');
   console.log(objectFilter);
-
 }
 
 function addCard(o) {
@@ -375,9 +386,3 @@ function addCard(o) {
 const test = document.addEventListener('DOMContentLoaded', init);
 
 console.log('Initializing now...');
-
-// setTimeout(function() { 
-//   var objectFilter = new ObjectFilter; 
-//   console.log(objectFilter);
-// }, 2900);
-

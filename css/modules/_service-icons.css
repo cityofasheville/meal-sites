@@ -2,9 +2,14 @@
 .service-delivery, 
 .service-meal, 
 .service-farmersmarket, 
+.service-seniormeals, 
+.service-ebtgroceries, 
+.service-wicgroceries, 
+.service-communitygardens, 
 .service-foodbox {
-  font-size: 1.5em;
+  font-size: 1.5rem;
   padding: 5px;
+  margin-right: .25rem;
   border-radius: 8px;
 }
 
@@ -19,7 +24,7 @@
 }
 
 .service-meal {
-  color: red;
+  color: lightcoral;
   border: 1px solid red;
 }
 
@@ -29,8 +34,28 @@
 }
 
 .service-farmersmarket {
-  color: green;
-  border: 1px solid green;
+  color: darkgreen;
+  border: 1px solid darkgreen;
+}
+
+.service-seniormeals {
+  color: darkslategrey;
+  border: 1px solid darkslategrey;
+}
+
+.service-wicgroceries {
+  color: darkblue;
+  border: 1px solid darkblue;
+}
+
+.service-ebtgroceries {
+  color: darkred;
+  border: 1px solid darkred;
+}
+
+.service-communitygardens {
+  color: darkolivegreen;
+  border: 1px solid darkolivegreen;
 }
 
 .table-print .service-student, 
