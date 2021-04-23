@@ -1,23 +1,29 @@
-// Spreadsheet: https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/
 
-// Public HTML version: https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/pubhtml
-
-// NOTE: the below URL assignment uses a query string to output CSV-style data for consumption by papaparse
-// https://support.google.com/docs/thread/56845119?hl=en&msgid=63716290
-// It is possible that Google could kill this method as well (RB, 21-Aug-2020)
-
-const public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1l4JL0SWvufEVlZnJzjAA_oIejsSbjQBEdfVSG4xQbpo/gviz/tq?tqx=out:csv&sheet=Sheet1';
-
-function init() {
-  Papa.parse(public_spreadsheet_url, {
-    download: true,
-    header: true,
-    error: showError,
-    complete: showInfo
+function getMealSites() {
+  axios.get('https://services.arcgis.com/aJ16ENn1AaqdFlqx/arcgis/rest/services/Meal_Merged_Map_View/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=type&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=500&returnZ=false&returnM=false&returnExceededLimitFeatures=false&quantizationParameters=&sqlFormat=none&f=pjson&token=')
+  .then(res => {
+    // logData(res.data.features);
+    initializeDataset(res.data.features);
   })
+  .catch(err => {
+    if (err.response) {
+      showError('Unexpected response: ' + err.message);
+      // client received an error response (5xx, 4xx)
+    } else if (err.request) {
+      showError('Request failed: ' + err.message);
+      // client never received a response, or request never left
+    } else {
+      showError(err.message);
+    }
+  });
 }
 
-function showError(err, eFile) {
+function logData(d) {
+  console.log('Func out');
+  console.log(d);
+}
+
+function showError(err, eFile='NA') {
   let displayMsg = `
     <div class="col-12">
       <h2>Error Report</h2>
@@ -34,9 +40,9 @@ function showError(err, eFile) {
   document.getElementById("food-locations").innerHTML = displayMsg;
 }
 
-function showInfo(results) {
 
-  let data = results.data
+function initializeDataset(data) {
+
   let objCount = 0;
   let cardSelectors = '';
   let typeLabel = '';
@@ -51,17 +57,12 @@ function showInfo(results) {
   let dayClassF = '';
   let dayClassSa = '';
   let dayClassSu = '';
-  let hoursOpen = '';
-  let daysOpen = '';
-  let serviceIcon = '';
 
+  // Object will contain arrays of objects representing filter options
   window.filterOptions = {
-    areaLabels: [],
-    areaValues: [],
-    dayLabels: [],
-    dayValues: [],
-    typeLabels: [],
-    typeValues: []
+    areas: [],
+    days: [],
+    types: [],
   };
 
   window.filterSelectors = [];
@@ -70,256 +71,292 @@ function showInfo(results) {
 
   for (let obj of data) {
 
-  // NOTE: ditching foreach loop b/c we need to break the loop on encountering empty row
-
-    // If we hit a blank line (no name), assume EOF (spreadsheet is pre-populated with rows/IDs for future entries)
-    if ( !obj.name ) {
-      break;
-    }
+  // NOTE: originally ditched foreach loop b/c we needed to break the loop on encountering empty row from spreadsheet
+  // since we started pulling more reliable data, can loop however you want 
 
     cardSelectors = '';
 
-    if ( obj.startDate.trim() ) {
-      startDate = new Date(obj.startDate);
+    if ( obj.attributes.startDate ) {
+      startDate = new Date(obj.attributes.startDate);
     } 
     else {
       startDate = new Date('3/1/2020');
     }
 
-    if ( obj.endDate.trim() ) {
-      endDate = new Date(obj.endDate);
+    if ( obj.attributes.endDate ) {
+      endDate = new Date(obj.attributes.endDate);
     } 
     else {
       endDate = new Date('1/1/2100');
     }
     
-    // console.log(`${obj.geoid} | ${obj.name} | ${startDate}`);
+    if ( (todaysDate <= endDate) && (todaysDate >= startDate) && obj.attributes.name ) {
 
-    if ( (todaysDate <= endDate) && (todaysDate >= startDate) && obj.name.trim() ) {
-    // if (obj.name.trim()) {
+      if (obj.attributes.generalArea) {
 
-      if (obj.generalArea.trim()) {
-
-        sanitizedValue = 'area-' + obj.generalArea.trim().toLowerCase().replace(/[^0-9a-z]/gi, '');
+        sanitizedValue = 'area-' + obj.attributes.generalArea.toLowerCase().replace(/[^0-9a-z]/gi, '');
         cardSelectors += sanitizedValue + ' ';
   
-        if (window.filterOptions.areaValues.indexOf(sanitizedValue) < 0) {
-          window.filterOptions.areaLabels.push(obj.generalArea.trim());
-          window.filterOptions.areaValues.push(sanitizedValue);
+        if (window.filterOptions.areas.map(function(e) { return e.value; }).indexOf(sanitizedValue) < 0) {
+            window.filterOptions.areas.push(
+            {
+              label: obj.attributes.generalArea,
+              value: sanitizedValue
+            }
+          );
         }
       }
   
-      if (obj.type.trim()) {
+      if (obj.attributes.type) {
   
-        sanitizedValue = 'type-' + obj.type.trim().toLowerCase().replace(/[^0-9a-z]/gi, '');
+        sanitizedValue = 'type-' + obj.attributes.type.toLowerCase().replace(/[^0-9a-z]/gi, '');
         cardSelectors += sanitizedValue + ' ';
   
-        if (window.filterOptions.typeValues.indexOf(sanitizedValue) < 0) {
-          if (obj.type.trim() === 'Students') { 
+        if (window.filterOptions.types.map(function(e) { return e.value; }).indexOf(sanitizedValue) < 0) {
+          if (obj.attributes.type === 'Students') { 
             typeLabel = 'Student Meals' 
           } else {
-            typeLabel = obj.type.trim() 
+            typeLabel = obj.attributes.type 
           }
-          window.filterOptions.typeLabels.push(typeLabel);
-          window.filterOptions.typeValues.push(sanitizedValue);
+          window.filterOptions.types.push(
+            {
+              label: typeLabel,
+              value: sanitizedValue
+            }
+          );
         }
       }
   
-      if (obj.mo.trim()) {
+      if (obj.attributes.mo) {
         cardSelectors += 'day-mo ';
         dayClassM = 'day-of-week--on';
-  
-        if (window.filterOptions.dayValues.indexOf('day-mo') < 0) {
-          window.filterOptions.dayLabels.push('Monday');
-          window.filterOptions.dayValues.push('day-mo');
+        if (window.filterOptions.days.map(function(e) { return e.value; }).indexOf('day-mo') < 0) {
+          window.filterOptions.days.push(
+            {
+              index: 0,
+              label: 'Monday',
+              value: 'day-mo'
+            }
+          );  
         }
       }
       else {
         dayClassM = 'day-of-week--off';
       }
   
-      if (obj.tu.trim()) {
+      if (obj.attributes.tu) {
         cardSelectors += 'day-tu ';
         dayClassT = 'day-of-week--on';
-  
-        if (window.filterOptions.dayValues.indexOf('day-tu') < 0) {
-          window.filterOptions.dayLabels.push('Tuesday');
-          window.filterOptions.dayValues.push('day-tu');
+        if (window.filterOptions.days.map(function(e) { return e.value; }).indexOf('day-tu') < 0) {
+          window.filterOptions.days.push(
+            {
+              index: 1,
+              label: 'Tuesday',
+              value: 'day-tu'
+            }
+          );  
         }
       }
       else {
         dayClassT = 'day-of-week--off';
       }
   
-      if (obj.we.trim()) {
+      if (obj.attributes.we) {
         cardSelectors += 'day-we ';
         dayClassW = 'day-of-week--on';
-  
-        if (window.filterOptions.dayValues.indexOf('day-we') < 0) {
-          window.filterOptions.dayLabels.push('Wednesday');
-          window.filterOptions.dayValues.push('day-we');
+        if (window.filterOptions.days.map(function(e) { return e.value; }).indexOf('day-we') < 0) {
+          window.filterOptions.days.push(
+            {
+              index: 2,
+              label: 'Wednesday',
+              value: 'day-we'
+            }
+          );  
         }
       }
       else {
         dayClassW = 'day-of-week--off';
       }
   
-      if (obj.th.trim()) {
+      if (obj.attributes.th) {
         cardSelectors += 'day-th ';
         dayClassTh = 'day-of-week--on';
-  
-        if (window.filterOptions.dayValues.indexOf('day-th') < 0) {
-          window.filterOptions.dayLabels.push('Thursday');
-          window.filterOptions.dayValues.push('day-th');
+        if (window.filterOptions.days.map(function(e) { return e.value; }).indexOf('day-th') < 0) {
+          window.filterOptions.days.push(
+            {
+              index: 3,
+              label: 'Thursday',
+              value: 'day-th'
+            }
+          );  
         }
       }
       else {
         dayClassTh = 'day-of-week--off';
       }
   
-      if (obj.fr.trim()) {
+      if (obj.attributes.fr) {
         cardSelectors += 'day-fr ';
         dayClassF = 'day-of-week--on';
-  
-        if (window.filterOptions.dayValues.indexOf('day-fr') < 0) {
-          window.filterOptions.dayLabels.push('Friday');
-          window.filterOptions.dayValues.push('day-fr');
+        if (window.filterOptions.days.map(function(e) { return e.value; }).indexOf('day-fr') < 0) {
+          window.filterOptions.days.push(
+            {
+              index: 4,
+              label: 'Friday',
+              value: 'day-fr'
+            }
+          );  
         }
       }
       else {
         dayClassF = 'day-of-week--off';
       }
   
-      if (obj.sa.trim()) {
+      if (obj.attributes.sa) {
         cardSelectors += 'day-sa ';
         dayClassSa = 'day-of-week--on';
-  
-        if (window.filterOptions.dayValues.indexOf('day-sa') < 0) {
-          window.filterOptions.dayLabels.push('Saturday');
-          window.filterOptions.dayValues.push('day-sa');
+        if (window.filterOptions.days.map(function(e) { return e.value; }).indexOf('day-sa') < 0) {
+          window.filterOptions.days.push(
+            {
+              index: 5,
+              label: 'Saturday',
+              value: 'day-sa'
+            }
+          );  
         }
       }
       else {
         dayClassSa = 'day-of-week--off';
       }
   
-      if (obj.su.trim()) {
+      if (obj.attributes.su) {
         cardSelectors += 'day-su ';
         dayClassSu = 'day-of-week--on';
-  
-        if (window.filterOptions.dayValues.indexOf('day-su') < 0) {
-          window.filterOptions.dayLabels.push('Sunday');
-          window.filterOptions.dayValues.push('day-su');
+        if (window.filterOptions.days.map(function(e) { return e.value; }).indexOf('day-su') < 0) {
+          window.filterOptions.days.push(
+            {
+              index: 6,
+              label: 'Sunday',
+              value: 'day-su'
+            }
+          );  
         }
       }
       else {
         dayClassSu = 'day-of-week--off';
       }
 
-      if ( !obj.startTime.trim() && !obj.endTime.trim() ) {
-        obj.hoursOpen = 'Hours not specified';
+      if ( !obj.attributes.startTime && !obj.attributes.endTime ) {
+        obj.attributes.hoursOpen = 'Hours not specified';
       }
-      else if ( obj.startTime.trim() && !obj.endTime.trim() ) {
-        obj.hoursOpen = `${obj.startTime} onward`;
+      else if ( obj.attributes.startTime && !obj.attributes.endTime ) {
+        obj.attributes.hoursOpen = `${obj.attributes.startTime} onward`;
       }
-      else if ( !obj.startTime.trim() && obj.endTime.trim() ) {
-        obj.hoursOpen = `Until ${obj.endTime}`;
+      else if ( !obj.startTime && obj.endTime ) {
+        obj.attributes.hoursOpen = `Until ${obj.attributes.endTime}`;
       }
       else {
-        obj.hoursOpen = `${obj.startTime} - ${obj.endTime}`;
+        obj.attributes.hoursOpen = `${obj.attributes.startTime} - ${obj.attributes.endTime}`;
       }
       
-      if ( !obj.startDate.trim() && !obj.endDate.trim() ) {
+      if ( !obj.attributes.startDate && !obj.attributes.endDate ) {
         obj.daysOpen = 'Dates not specified';
       }
-      else if ( obj.startDate.trim() && !obj.endDate.trim() ) {
-        obj.daysOpen = `${moment(startDate).format("MMMM Do")} onward`;
+      else if ( obj.attributes.startDate && !obj.attributes.endDate || obj.attributes.startDate && moment(todaysDate).format("YYYY") < moment(endDate).format("YYYY") ) {
+        obj.attributes.daysOpen = `${moment(startDate).format("MMM Do, YYYY")} onward`;
       }
-      else if ( !obj.startDate.trim() && obj.endDate.trim() ) {
-        obj.daysOpen = `Effective until ${moment(endDate).format("MMMM Do")}`;
+      else if ( !obj.attributes.startDate && obj.attributes.endDate && moment(todaysDate).format("YYYY") === moment(endDate).format("YYYY") ) {
+        obj.attributes.daysOpen = `Effective until ${moment(endDate).format("MMM Do, YYYY")}`;
+      }
+      else if ( !obj.attributes.startDate && obj.attributes.endDate && moment(todaysDate).format("YYYY") < moment(endDate).format("YYYY") ) {
+        obj.attributes.daysOpen = `Ongoing`;
       }
       else {
-        if ( obj.startDate.trim() === obj.endDate.trim() ) {
-          obj.daysOpen = `${moment(startDate).format("MMMM Do")} Only`;
+        if ( obj.attributes.startDate === obj.attributes.endDate ) {
+          obj.attributes.daysOpen = `${moment(startDate).format("MMM Do, YYYY")} Only`;
         }
         else {
-          obj.daysOpen = `${moment(startDate).format("MMMM Do")} - ${moment(endDate).format("MMMM Do")}`;
+          obj.attributes.daysOpen = `${moment(startDate).format("MMM Do, YYYY")} - ${moment(endDate).format("MMM Do, YYYY")}`;
         }
       }
 
-      switch ( obj.type.trim() ) {
+      switch ( obj.attributes.type ) {
         case "Students":
-          obj.serviceIcon = `<i class="fas fa-utensils service-student"></i>`;
+          obj.attributes.serviceIcon = `<i class="fas fa-utensils service-student"></i>`;
           break;
         case "Student Delivery Site":
-          obj.serviceIcon = `<i class="fas fa-truck-loading service-delivery"></i>`;
+          obj.attributes.serviceIcon = `<i class="fas fa-truck-loading service-delivery"></i>`;
           break;
         case "Meal Pickup":
-          obj.serviceIcon = `<i class="fas fa-toolbox service-meal"></i>`;
+          obj.attributes.serviceIcon = `<i class="fas fa-toolbox service-meal"></i>`;
           break;
         case "Food Box Pickup":
-          obj.serviceIcon = `<i class="fas fa-shopping-basket service-foodbox"></i>`;
+          obj.attributes.serviceIcon = `<i class="fas fa-shopping-basket service-foodbox"></i>`;
           break;
         case "Farmers Market":
-          obj.serviceIcon = `<i class="fas fa-tractor service-farmersmarket"></i>`;
+          obj.attributes.serviceIcon = `<i class="fas fa-tractor service-farmersmarket"></i>`;
           break;
         case "Senior Meals":
-          obj.serviceIcon = `<i class="fab fa-stripe-s service-seniormeals"></i>`;
+          obj.attributes.serviceIcon = `<i class="fab fa-stripe-s service-seniormeals"></i>`;
           break;
         case "EBT Groceries":
-          obj.serviceIcon = `<i class="far fa-credit-card service-ebtgroceries"></i>`;
+          obj.attributes.serviceIcon = `<i class="far fa-credit-card service-ebtgroceries"></i>`;
           break;
         case "WIC Groceries":
-          obj.serviceIcon = `<i class="fas fa-baby service-wicgroceries"></i>`;
+          obj.attributes.serviceIcon = `<i class="fas fa-baby service-wicgroceries"></i>`;
           break;
         case "Community Gardens":
-          obj.serviceIcon = `<i class="fas fa-seedling service-communitygardens"></i>`;
+          obj.attributes.serviceIcon = `<i class="fas fa-seedling service-communitygardens"></i>`;
           break;
         default:
-          obj.serviceIcon = "";
+          obj.attributes.serviceIcon = "";
       }
         
-      obj.selectors = cardSelectors;
-      obj.styleM = dayClassM;
-      obj.styleT = dayClassT;
-      obj.styleW = dayClassW;
-      obj.styleTh = dayClassTh;
-      obj.styleF = dayClassF;
-      obj.styleSa = dayClassSa;
-      obj.styleSu = dayClassSu;
+      obj.attributes.selectors = cardSelectors;
+      obj.attributes.styleM = dayClassM;
+      obj.attributes.styleT = dayClassT;
+      obj.attributes.styleW = dayClassW;
+      obj.attributes.styleTh = dayClassTh;
+      obj.attributes.styleF = dayClassF;
+      obj.attributes.styleSa = dayClassSa;
+      obj.attributes.styleSu = dayClassSu;
   
       thisObject = {
-        objectID: obj.geoid,
+        objectID: obj.attributes.OBJECTID,
         selectors: cardSelectors
       };
   
       window.filterSelectors.push(thisObject);
   
-      addCard(obj);
+      addCard(obj.attributes);
 
       objCount++;
-  
     }
   }
 
-  console.log('-- Filter Selectors on the Window --');
+  console.log(`-- Filter Selectors on the Window (${objCount}) --`);
   console.log(window.filterSelectors);
 
+  // Sort the options sensibly for display
+  window.filterOptions.areas.sort( (a,b) => a.label > b.label ? 1 : -1 );
+  window.filterOptions.types.sort( (a,b) => a.label > b.label ? 1 : -1 );
+  window.filterOptions.days.sort( (a,b) => a.index > b.index ? 1 : -1 )
+
   let areaOptions = '';
-  for (let i=0; i < window.filterOptions.areaValues.length; i++) {
-    areaOptions += `<option value="${window.filterOptions.areaValues[i]}">${window.filterOptions.areaLabels[i]}</option>`
+  for (let i=0; i < window.filterOptions.areas.length; i++) {
+    areaOptions += `<option value="${window.filterOptions.areas[i].value}">${window.filterOptions.areas[i].label}</option>`
   }
   document.getElementById('filter-area').innerHTML += areaOptions;
 
   let dayOptions = '';
-  for (let i=0; i < window.filterOptions.dayValues.length; i++) {
-    dayOptions += `<option value="${window.filterOptions.dayValues[i]}">${window.filterOptions.dayLabels[i]}</option>`
+  for (let i=0; i < window.filterOptions.days.length; i++) {
+    dayOptions += `<option value="${window.filterOptions.days[i].value}">${window.filterOptions.days[i].label}</option>`
   }
   document.getElementById('filter-day').innerHTML += dayOptions;
 
   let typeOptions = '';
-  for (let i=0; i < window.filterOptions.typeValues.length; i++) {
-    typeOptions += `<option value="${window.filterOptions.typeValues[i]}">${window.filterOptions.typeLabels[i]}</option>`
+  for (let i=0; i < window.filterOptions.types.length; i++) {
+    typeOptions += `<option value="${window.filterOptions.types[i].value}">${window.filterOptions.types[i].label}</option>`
   }
   document.getElementById('filter-type').innerHTML += typeOptions;
 
@@ -338,7 +375,7 @@ function addCard(o) {
   let q = encodeURIComponent(o.address);
 
   window.foodLocationsHTML += `
-    <div class="col p-0 mb-5 all-objects object-${o.geoid} ${o.selectors}">
+    <div class="col p-0 mb-5 all-objects object-${o.OBJECTID} ${o.selectors}">
       <div class="card inner m-3 h-100">
         <div class="card-header"><h3>${o.name}</h3></div>
         <ul class="list-group list-group-flush">
@@ -363,7 +400,7 @@ function addCard(o) {
   `;
 
   window.foodLocationsPrintHTML += `
-    <tr class="all-objects object-${o.geoid} ${o.selectors}">
+    <tr class="all-objects object-${o.OBJECTID} ${o.selectors}">
       <td><h3>${o.name}</h3>${o.serviceIcon} ${o.type === 'Students' ? 'Student Meals' : o.type}</td>
       <td>
         <ul class="week-list week-list--print" aria-label="Days of the week">
@@ -383,6 +420,6 @@ function addCard(o) {
 
 }      
 
-const test = document.addEventListener('DOMContentLoaded', init);
+const initialize = document.addEventListener('DOMContentLoaded', getMealSites);
 
 console.log('Initializing now...');
